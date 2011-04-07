@@ -1,17 +1,11 @@
 package me.Joeyy.Armor;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.plugin.PluginManager;
@@ -30,7 +24,6 @@ public class Armor extends JavaPlugin {
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, ArmorListener,
 				Event.Priority.Normal, this);
 		this.loadConfigFile();
-		addCommands();
 
 		log.info("Armor version "+ getDescription().getVersion() + " is enabled");
 	}
@@ -86,73 +79,6 @@ public class Armor extends JavaPlugin {
 				System.out
 						.println("ERROR! Armor: could not create configuration file");
 			}
-	}
-	
-	private void addCommands() {
-		getCommand("equiparmor").setExecutor(new GiveArmor(this));
-	}
-	
-	public boolean isPlayer(CommandSender sender) {
-		if (sender instanceof Player)
-			return true;
-
-		return false;
-	}
-	
-	public Player playerMatch(String name) {
-		if (this.getServer().getOnlinePlayers().length < 1) {
-			return null;
-		}
-
-		Player[] online = this.getServer().getOnlinePlayers();
-		Player lastPlayer = null;
-
-		for (Player player : online) {
-			String playerName = player.getName();
-			String playerDisplayName = player.getDisplayName();
-
-			if (playerName.equalsIgnoreCase(name)) {
-				lastPlayer = player;
-				break;
-			} else if (playerDisplayName.equalsIgnoreCase(name)) {
-				lastPlayer = player;
-				break;
-			}
-
-			if (playerName.toLowerCase().indexOf(name.toLowerCase()) != -1) {
-				if (lastPlayer != null) {
-					return null;
-				}
-
-				lastPlayer = player;
-			} else if (playerDisplayName.toLowerCase().indexOf(
-					name.toLowerCase()) != -1) {
-				if (lastPlayer != null) {
-					return null;
-				}
-
-				lastPlayer = player;
-			}
-		}
-
-		return lastPlayer;
-	}
-	
-	public String[] itemList() {
-		ArrayList<String> itemlist = new ArrayList<String>();
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(
-					getDataFolder() + File.separator + "item.txt"));
-			String str;
-			while ((str = in.readLine()) != null) {
-				itemlist.add(str);
-			}
-			in.close();
-		} catch (IOException e) {
-			log.info("[Armor] Could not get item list.");
-		}
-
-		return itemlist.toArray(new String[] {});
 	}
 
 }
