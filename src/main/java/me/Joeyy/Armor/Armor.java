@@ -84,18 +84,16 @@ public class Armor extends JavaPlugin {
 				myStream.println("\n");
 				myStream.close();
 			} catch (Exception e) {
-				System.out
-						.println("ERROR! Armor: could not create configuration file");
+				log.warning("Armor: could not create configuration file");
 			}
 	}
 
-	  @SuppressWarnings("static-access")
 		private void setupPermissions() {
 		      Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
 
-		      if (this.Permissions == null) {
+		      if (Armor.Permissions == null) {
 		          if (test != null) {
-		              this.Permissions = ((Permissions)test).getHandler();
+		              Armor.Permissions = ((Permissions)test).getHandler();
 		          } else {
 		              log.info("Permission system not detected, defaulting to OP");
 		          }
