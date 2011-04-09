@@ -113,13 +113,9 @@ public class Armor extends JavaPlugin {
 			return;
 		PlayerInventory inv = player.getInventory();
 		
-		
-		ItemStack helmetStack = new ItemStack(set.helmet, 1, set.helmet.getMaxDurability(), new Byte((byte) 0));
-		//helmetStack.setDurability(set.helmet.getMaxDurability());
-		inv.setHelmet(helmetStack);
-		inv.setChestplate(new ItemStack(set.chestplate));
-		inv.setLeggings(new ItemStack(set.leggings));
-		inv.setBoots(new ItemStack(set.boots));
-		System.out.println("epicfailure " + set.helmet.getMaxDurability());
+		inv.setHelmet(new ItemStack(set.helmet, 1, set.helmet.getMaxDurability(), new Byte((byte) 0)));
+		inv.setChestplate(new ItemStack(set.chestplate, 1, set.chestplate.getMaxDurability(), new Byte((byte) 0)));
+		inv.setLeggings(new ItemStack(set.leggings, 1, set.leggings.getMaxDurability(), new Byte((byte) 0)));
+		inv.setBoots(new ItemStack(set.boots, 1, set.boots.getMaxDurability(), new Byte((byte) 0)));
 	}
 }
