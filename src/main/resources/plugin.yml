@@ -3,5 +3,5 @@ main: me.Joeyy.Armor.Armor
 version: 0.1
 commands:
   equiparmor:
-    description: Displays your position or teleports you to another.
-    usage: "Usage: '/pos' to get current position, or '/pos x y z' to teleport to x,y,z"
+    description: Automaticly equips you with the desired type of armor.
+    usage: "Usage: '/equiparmor TYPE <player>' Replace type with leather/chainmail/iron/gold/diamond."

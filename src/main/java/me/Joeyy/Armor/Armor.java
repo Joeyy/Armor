@@ -112,9 +112,14 @@ public class Armor extends JavaPlugin {
 		if (player == null || !player.isOnline())
 			return;
 		PlayerInventory inv = player.getInventory();
-		inv.setHelmet(new ItemStack(set.helmet));
+		
+		
+		ItemStack helmetStack = new ItemStack(set.helmet, 1, set.helmet.getMaxDurability(), new Byte((byte) 0));
+		//helmetStack.setDurability(set.helmet.getMaxDurability());
+		inv.setHelmet(helmetStack);
 		inv.setChestplate(new ItemStack(set.chestplate));
 		inv.setLeggings(new ItemStack(set.leggings));
 		inv.setBoots(new ItemStack(set.boots));
+		System.out.println("epicfailure " + set.helmet.getMaxDurability());
 	}
 }

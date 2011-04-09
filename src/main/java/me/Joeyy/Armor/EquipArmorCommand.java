@@ -36,7 +36,10 @@ public class EquipArmorCommand implements CommandExecutor {
 		// check for both player and console
 		if (args.length >= 2) {
 			Player p = plugin.getServer().getPlayer(args[1]);
-			if (p != null)
+			if (p == null || !p.isOnline()) {
+				sender.sendMessage("Player "+ args[1] + " is not found.");
+				return true;
+			}
 				target = p;
 		}
 		System.out.println("ARMOR 4");
@@ -46,7 +49,12 @@ public class EquipArmorCommand implements CommandExecutor {
 			return true;
 		}
 		// find armor type
-		ArmorType set = ArmorType.valueOf(args[0].toUpperCase());
+		ArmorType set;
+		try {
+			set = ArmorType.valueOf(args[0].toUpperCase());
+		} catch (IllegalArgumentException e) {
+			set = null;
+		}
 		System.out.println("ARMOR 5");
 		if (set == null) {
 			// maybe send list of valid armor types
