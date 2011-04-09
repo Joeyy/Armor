@@ -1,12 +1,8 @@
 package me.Joeyy.Armor;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -14,29 +10,41 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
+
 
 public class Armor extends JavaPlugin {
 	ArmorListener ArmorListener = new ArmorListener(this);
 	PlayerListener ArmorMove = new PlayerListener();
+
+	public static PermissionHandler Permissions;
 	public static final Logger log = Logger.getLogger("Minecraft");
 	public final static String premessage = ChatColor.RED + "[Armor] "
-	+ ChatColor.YELLOW;
-
+			+ ChatColor.YELLOW;
 
 	public void onEnable() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, ArmorListener,
 				Event.Priority.Normal, this);
 		this.loadConfigFile();
-		addCommands();
+		setupPermissions();
 
-		log.info("Armor version "+ getDescription().getVersion() + " is enabled");
+		log.info("Armor version " + getDescription().getVersion()
+				+ " is enabled");
+		
+		getCommand("equiparmor").setExecutor(new EquipArmorCommand(this));
 	}
 
 	public void onDisable() {
-		log.info("Armor version "+ getDescription().getVersion() + " is disabled");
+		log.info("Armor version " + getDescription().getVersion()
+				+ " is disabled");
 
 	}
 
@@ -74,85 +82,39 @@ public class Armor extends JavaPlugin {
 				myStream.println("\n");
 				myStream.println("##Control monster damage##");
 				myStream.println("\n");
-				myStream.println("Damage-Of-Zombie-While-Wearing-Leather: 3\n");
-				myStream.println("\n");
-				myStream.println("Damage-Of-Zombie-While-Wearing-Iron: 2\n");
-				myStream.println("\n");
-				myStream.println("Damage-Of-Zombie-While-Wearing-Gold: 2\n");
-				myStream.println("\n");
-				myStream.println("Damage-Of-Zombie-While-Wearing-Diamond: 1\n");
 				myStream.close();
 			} catch (Exception e) {
 				System.out
 						.println("ERROR! Armor: could not create configuration file");
 			}
 	}
-	
-	private void addCommands() {
-		getCommand("equiparmor").setExecutor(new GiveArmor(this));
-	}
-	
+
+	  @SuppressWarnings("static-access")
+		private void setupPermissions() {
+		      Plugin test = this.getServer().getPluginManager().getPlugin("Permissions");
+
+		      if (this.Permissions == null) {
+		          if (test != null) {
+		              this.Permissions = ((Permissions)test).getHandler();
+		          } else {
+		              log.info("Permission system not detected, defaulting to OP");
+		          }
+		      }
+		  }
+
 	public boolean isPlayer(CommandSender sender) {
 		if (sender instanceof Player)
 			return true;
-
 		return false;
 	}
 	
-	public Player playerMatch(String name) {
-		if (this.getServer().getOnlinePlayers().length < 1) {
-			return null;
-		}
-
-		Player[] online = this.getServer().getOnlinePlayers();
-		Player lastPlayer = null;
-
-		for (Player player : online) {
-			String playerName = player.getName();
-			String playerDisplayName = player.getDisplayName();
-
-			if (playerName.equalsIgnoreCase(name)) {
-				lastPlayer = player;
-				break;
-			} else if (playerDisplayName.equalsIgnoreCase(name)) {
-				lastPlayer = player;
-				break;
-			}
-
-			if (playerName.toLowerCase().indexOf(name.toLowerCase()) != -1) {
-				if (lastPlayer != null) {
-					return null;
-				}
-
-				lastPlayer = player;
-			} else if (playerDisplayName.toLowerCase().indexOf(
-					name.toLowerCase()) != -1) {
-				if (lastPlayer != null) {
-					return null;
-				}
-
-				lastPlayer = player;
-			}
-		}
-
-		return lastPlayer;
+	public static void givePlayerArmor(Player player, ArmorType set) {
+		if (player == null || !player.isOnline())
+			return;
+		PlayerInventory inv = player.getInventory();
+		inv.setHelmet(new ItemStack(set.helmet));
+		inv.setChestplate(new ItemStack(set.chestplate));
+		inv.setLeggings(new ItemStack(set.leggings));
+		inv.setBoots(new ItemStack(set.boots));
 	}
-	
-	public String[] itemList() {
-		ArrayList<String> itemlist = new ArrayList<String>();
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(
-					getDataFolder() + File.separator + "item.txt"));
-			String str;
-			while ((str = in.readLine()) != null) {
-				itemlist.add(str);
-			}
-			in.close();
-		} catch (IOException e) {
-			log.info("[Armor] Could not get item list.");
-		}
-
-		return itemlist.toArray(new String[] {});
-	}
-
 }

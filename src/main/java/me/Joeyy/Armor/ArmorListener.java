@@ -139,21 +139,23 @@ public class ArmorListener extends EntityListener {
 
 		if (event instanceof EntityDamageByEntityEvent) {
 
-			ItemStack helmet = player.getInventory().getHelmet();
+			/** ItemStack helmet = player.getInventory().getHelmet();
 			ItemStack chestplate = player.getInventory().getChestplate();
 			ItemStack leggings = player.getInventory().getLeggings();
-			ItemStack boots = player.getInventory().getBoots();
+			ItemStack boots = player.getInventory().getBoots(); **/
 
 			switch (event.getCause()) {
 			case ENTITY_ATTACK:
 
-				if (itemSet("LEATHER", player)) {
+			/**	if (itemSet("LEATHER", player)) {
 					event.setDamage(plugin.getConfiguration().getInt(
 							"Damage-Of-Zombie-While-Wearing-Leather", 3));
-					System.out.println("Health " + player.getHealth() + " helmet " + helmet.getDurability()
+					System.out.println("Health " + player.getHealth()
+							+ " helmet " + helmet.getDurability()
 							+ " chestplate " + chestplate.getDurability()
 							+ " leggings " + leggings.getDurability()
-							+ " boots " + boots.getDurability() + " Monster " + ((EntityDamageByEntityEvent) event).getDamager());
+							+ " boots " + boots.getDurability() + " Monster "
+							+ ((EntityDamageByEntityEvent) event).getDamager());
 				}
 				if (itemSet("IRON", player)) {
 					((EntityDamageByEntityEvent) event).getDamager();
@@ -172,8 +174,8 @@ public class ArmorListener extends EntityListener {
 					event.getDamage();
 					event.setDamage(plugin.getConfiguration().getInt(
 							"Damage-Of-Zombie-While-Wearing-Diamond", 1));
-				}
-			}
+				} **/
+			}  
 		}
 	}
 
