@@ -1,12 +1,11 @@
 package me.Joeyy.Armor;
 
+import java.util.Random;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-//import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +21,7 @@ public class ArmorListener extends EntityListener {
 	}
 
 	public void onEntityDamage(EntityDamageEvent event) {
+		Random random = new Random();
 		Entity entity = event.getEntity();
 
 		if (!(entity instanceof Player))
@@ -149,7 +149,7 @@ public class ArmorListener extends EntityListener {
 			}
 		}
 
-	/**	if (!(event instanceof EntityDamageByEntityEvent))
+	/** if (!(event instanceof EntityDamageByEntityEvent))
 			return;
 
 		if (event instanceof EntityDamageByEntityEvent) {

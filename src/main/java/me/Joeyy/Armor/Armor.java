@@ -37,7 +37,7 @@ public class Armor extends JavaPlugin {
 		setupPermissions();
 
 		log.info("Armor version " + getDescription().getVersion()
-				+ " is enabled");
+				+ " is enabled. If you updated Armor from 1.0 to 1.1 please delete the config file!");
 		
 		getCommand("equiparmor").setExecutor(new EquipArmorCommand(this));
 	}
@@ -80,14 +80,14 @@ public class Armor extends JavaPlugin {
 				myStream.println("\n");
 				myStream.println("Hurt-On-Catcus-Contact-Prevention: true\n");
 				myStream.println("\n");
-				myStream.println("##Control the chance (in %) of missed attacks done by monsters##");
+			/**	myStream.println("##Control the chance (in %) of missed attacks done by monsters##");
 				myStream.println("##Do not include the % symbol after your chance##");
 				myStream.println("\n");
 				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Leather: 5\n");
 				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Iron: 10\n");
 				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Gold: 25\n");
 				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Diamond: 20\n");
-				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Chainmail: 30\n");
+				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Chainmail: 30\n"); **/
 				myStream.close();
 			} catch (Exception e) {
 				log.warning("Armor: could not create configuration file");
