@@ -61,7 +61,7 @@ public class EquipArmorCommand implements CommandExecutor {
 			// maybe send list of valid armor types
 			sender.sendMessage(ChatColor.YELLOW
 					+ "Invalid armor type. Types: "
-					+ ArmorType.getTypeNames());
+					+ ArmorType.getTypeNames().toLowerCase());
 			return true;
 		}
 		
