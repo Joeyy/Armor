@@ -1,6 +1,5 @@
 package me.Joeyy.Armor;
 
-import java.util.Random;
 import java.util.logging.Logger;
 
 import org.bukkit.Material;
@@ -21,7 +20,6 @@ public class ArmorListener extends EntityListener {
 	}
 
 	public void onEntityDamage(EntityDamageEvent event) {
-		Random random = new Random();
 		Entity entity = event.getEntity();
 
 		if (!(entity instanceof Player))
@@ -30,49 +28,59 @@ public class ArmorListener extends EntityListener {
 		Player player = (Player) entity;
 
 		switch (event.getCause()) {
-
 		case FALL:
-			if (event.getDamage() <= plugin.getConfiguration().getInt(
-					"Leather-Boots-Fall-Damage-Prevention", 1)
-					&& player.getInventory().getBoots().getType() == Material.LEATHER_BOOTS) {
-				event.getDamage();
-				event.setCancelled(true);
-			}
-
-			if (event.getDamage() <= plugin.getConfiguration().getInt(
-					"Iron-Boots-Fall-Damage-Prevention", 2)
-					&& player.getInventory().getBoots().getType() == Material.IRON_BOOTS) {
-				event.getDamage();
-				event.setCancelled(true);
-			}
-			
-			if (event.getDamage() <= plugin.getConfiguration().getInt(
-					"Chain-Boots-Fall-Damage-Prevention", 2)
-					&& player.getInventory().getBoots().getType() == Material.CHAINMAIL_BOOTS) {
-				event.getDamage();
-				event.setCancelled(true);
-			}
-
-			if (event.getDamage() <= plugin.getConfiguration().getInt(
-					"Gold-Boots-Fall-Damage-Prevention", 3)
-					&& player.getInventory().getBoots().getType() == Material.GOLD_BOOTS) {
-				event.getDamage();
-				event.setCancelled(true);
-			}
-
-			if (event.getDamage() <= plugin.getConfiguration().getInt(
-					"Diamond-Boots-Fall-Damage-Prevention", 4)
-					&& player.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS) {
-				event.getDamage();
-				event.setCancelled(true);
-			}
+			fall(event, player);
+			break;
+		case LAVA:
+			lava(event, player);
+			break;
+		case CONTACT:
+			contact(event, player);
+			break;
 		}
 
-		if (plugin.getConfiguration().getBoolean(
-				"Hurt-On-Catcus-Contact-Prevention", true)) {
+	/**	if (!(event instanceof EntityDamageByEntityEvent))
+			return;
+
+		if (event instanceof EntityDamageByEntityEvent) {
 
 			switch (event.getCause()) {
-			case CONTACT:
+			case ENTITY_ATTACK:
+
+				if (itemSet("LEATHER", player)) {
+					event.setDamage(plugin
+							.getConfiguration()
+							.getInt("Chance-Of-Missed-Attacks-While-Wearing-Leather",
+									5));
+				}
+				if (itemSet("IRON", player)) {
+					((EntityDamageByEntityEvent) event).getDamager();
+					event.setDamage(plugin.getConfiguration().getInt(
+							"Damage-Of-Zombie-While-Wearing-Iron", 2));
+				}
+				if (itemSet("GOLD", player)) {
+					((EntityDamageByEntityEvent) event).getDamager();
+					event.getDamage();
+					event.setDamage(plugin.getConfiguration().getInt(
+							"Damage-Of-Zombie-While-Wearing-Gold", 2));
+				}
+				if (itemSet("DIAMOND", player)) {
+					((EntityDamageByEntityEvent) event).getDamager();
+					event.getDamage();
+					event.setDamage(plugin.getConfiguration().getInt(
+							"Damage-Of-Zombie-While-Wearing-Diamond", 1));
+				}
+			}
+		} **/
+	}
+
+	/**
+	 * @param event
+	 * @param player
+	 */
+	private void contact(EntityDamageEvent event, Player player) {
+		if (plugin.getConfiguration().getBoolean("Hurt-On-Catcus-Contact-Prevention", true)) {
+
 				switch (player.getInventory().getHelmet().getType()) {
 				case IRON_HELMET:
 				case CHAINMAIL_HELMET:
@@ -114,74 +122,78 @@ public class ArmorListener extends EntityListener {
 				}
 
 				event.setCancelled(true);
-				break;
-			}
 		}
-		if (plugin.getConfiguration().getBoolean(
-				"Hurt-On-Catcus-Contact-Prevention", false)) {
+	}
+
+	/**
+	 * @param event
+	 * @param player
+	 */
+	private void lava(EntityDamageEvent event, Player player) {
+		if (itemSet("LEATHER", player)) {
+			event.setDamage(plugin.getConfiguration().getInt(
+					"Set-Lava-Damage-Using-Ironarmor", 4));
 		}
-
-		switch (event.getCause()) {
-		case LAVA:
-
-			if (itemSet("LEATHER", player)) {
-				event.setDamage(plugin.getConfiguration().getInt(
-						"Set-Lava-Damage-Using-Ironarmor", 4));
-			}
-			
-			if (itemSet("IRON", player)) {
-				event.setDamage(plugin.getConfiguration().getInt(
-						"Set-Lava-Damage-Using-Ironarmor", 3));
-			}
-			
-			if (itemSet("GOLD", player)) {
-				event.setDamage(plugin.getConfiguration().getInt(
-						"Set-Lava-Damage-Using-Ironarmor", 3));
-			}
-
-			if (itemSet("CHAINMAIL", player)) {
-				event.setDamage(plugin.getConfiguration().getInt(
-						"Set-Lava-Damage-Using-Goldnarmor", 2));
-			}
-			if (itemSet("DIAMOND", player)) {
-				event.setDamage(plugin.getConfiguration().getInt(
-						"Set-Lava-Damage-Using-Diamondarmor", 1));
-			}
+		
+		if (itemSet("IRON", player)) {
+			event.setDamage(plugin.getConfiguration().getInt(
+					"Set-Lava-Damage-Using-Ironarmor", 3));
+		}
+		
+		if (itemSet("GOLD", player)) {
+			event.setDamage(plugin.getConfiguration().getInt(
+					"Set-Lava-Damage-Using-Ironarmor", 3));
 		}
 
-	/** if (!(event instanceof EntityDamageByEntityEvent))
-			return;
+		if (itemSet("CHAINMAIL", player)) {
+			event.setDamage(plugin.getConfiguration().getInt(
+					"Set-Lava-Damage-Using-Goldnarmor", 2));
+		}
+		if (itemSet("DIAMOND", player)) {
+			event.setDamage(plugin.getConfiguration().getInt(
+					"Set-Lava-Damage-Using-Diamondarmor", 1));
+		}
+	}
 
-		if (event instanceof EntityDamageByEntityEvent) {
+	/**
+	 * @param event
+	 * @param player
+	 */
+	private void fall(EntityDamageEvent event, Player player) {
+		if (event.getDamage() <= plugin.getConfiguration().getInt(
+				"Leather-Boots-Fall-Damage-Prevention", 1)
+				&& player.getInventory().getBoots().getType() == Material.LEATHER_BOOTS) {
+			event.getDamage();
+			event.setCancelled(true);
+		}
 
-			switch (event.getCause()) {
-			case ENTITY_ATTACK:
+		if (event.getDamage() <= plugin.getConfiguration().getInt(
+				"Iron-Boots-Fall-Damage-Prevention", 2)
+				&& player.getInventory().getBoots().getType() == Material.IRON_BOOTS) {
+			event.getDamage();
+			event.setCancelled(true);
+		}
+		
+		if (event.getDamage() <= plugin.getConfiguration().getInt(
+				"Chain-Boots-Fall-Damage-Prevention", 2)
+				&& player.getInventory().getBoots().getType() == Material.CHAINMAIL_BOOTS) {
+			event.getDamage();
+			event.setCancelled(true);
+		}
 
-				if (itemSet("LEATHER", player)) {
-					event.setDamage(plugin
-							.getConfiguration()
-							.getInt("Chance-Of-Missed-Attacks-While-Wearing-Leather",
-									5));
-				}
-				if (itemSet("IRON", player)) {
-					((EntityDamageByEntityEvent) event).getDamager();
-					event.setDamage(plugin.getConfiguration().getInt(
-							"Damage-Of-Zombie-While-Wearing-Iron", 2));
-				}
-				if (itemSet("GOLD", player)) {
-					((EntityDamageByEntityEvent) event).getDamager();
-					event.getDamage();
-					event.setDamage(plugin.getConfiguration().getInt(
-							"Damage-Of-Zombie-While-Wearing-Gold", 2));
-				}
-				if (itemSet("DIAMOND", player)) {
-					((EntityDamageByEntityEvent) event).getDamager();
-					event.getDamage();
-					event.setDamage(plugin.getConfiguration().getInt(
-							"Damage-Of-Zombie-While-Wearing-Diamond", 1));
-				}
-			}
-		} **/
+		if (event.getDamage() <= plugin.getConfiguration().getInt(
+				"Gold-Boots-Fall-Damage-Prevention", 3)
+				&& player.getInventory().getBoots().getType() == Material.GOLD_BOOTS) {
+			event.getDamage();
+			event.setCancelled(true);
+		}
+
+		if (event.getDamage() <= plugin.getConfiguration().getInt(
+				"Diamond-Boots-Fall-Damage-Prevention", 4)
+				&& player.getInventory().getBoots().getType() == Material.DIAMOND_BOOTS) {
+			event.getDamage();
+			event.setCancelled(true);
+		}
 	}
 
 	public boolean itemSet(String type, Player player) {
