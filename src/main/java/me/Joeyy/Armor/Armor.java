@@ -37,7 +37,7 @@ public class Armor extends JavaPlugin {
 		setupPermissions();
 
 		log.info("Armor version " + getDescription().getVersion()
-				+ " is enabled. If you updated Armor from 1.0 to 1.1 please delete the config file!");
+				+ " is enabled. If you updated Armor from 1.1 to 1.2 please delete the config file!");
 		
 		getCommand("equiparmor").setExecutor(new EquipArmorCommand(this));
 	}
@@ -87,7 +87,7 @@ public class Armor extends JavaPlugin {
 				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Iron: 10\n");
 				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Gold: 14\n");
 				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Diamond: 20\n");
-				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Chainmail: 30\n"); 
+				myStream.println("Chance-Of-Missed-Attacks-While-Wearing-Chainmail: 30\n");
 				myStream.close();
 			} catch (Exception e) {
 				log.warning("Armor: could not create configuration file");
